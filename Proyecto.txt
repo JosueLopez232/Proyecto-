@@ -1,0 +1,542 @@
+// Includes the Servo library
+#include <Servo.h>. 
+// Defines Tirg and Echo pins of the Ultrasonic Sensor
+const int trigPin = 10;
+const int echoPin = 11;
+// Variables for the duration and the distance
+long duration;
+int distance;
+
+int i=0;
+int a=0;
+int b=0;
+int referencia;
+int bandera=0;
+int memoria=0;
+
+int angA_1=0;
+int angB_1=0;
+int angM_1=0;
+int D_1;
+int CORDX1;
+int CORDY1;
+int pasadas_1=0;
+
+int angA_2=0;
+int angB_2=0;
+int angM_2=0;
+int D_2;
+int CORDX2;
+int CORDY2;
+int pasadas_2=0;
+
+int angA_3=0;
+int angB_3=0;
+int angM_3=0;
+int D_3;
+int CORDX3;
+int CORDY3;
+int pasadas_3=0;
+
+Servo myServo; // Creates a servo object for controlling the servo motor
+void setup() {
+  pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
+  pinMode(echoPin, INPUT); // Sets the echoPin as an Input
+  Serial.begin(9600);
+  myServo.attach(12); // Defines on which pin is the servo motor attached
+  myServo.write(15);
+  delay(3000);
+  
+}
+
+void loop() {
+  // rotates the servo motor from 15 to 165 degrees
+  for(i=15;i<=165;i++)
+  {  
+    myServo.write(i);
+    delay(150);
+    distance = calculateDistance();// Calls a function for calculating the distance measured by the Ultrasonic sensor for each degree
+    if (distance<79&&memoria<3)
+    {
+      switch(memoria)
+      {
+        case (0):
+        if(bandera==0)
+        {
+          angA_1=i;
+
+          for(i=angA_1++;distance<85||i<angA_1+10;i++)
+          {
+            myServo.write(i);
+            delay(75);
+            distance = calculateDistance();
+            delay(75);
+            if(distance<65)
+            {
+              angB_1=i;
+            }
+          }
+  
+          angM_1=((angA_1)+(angB_1))/2;
+          myServo.write(angM_1);
+          delay(250);
+          D_1=calculateDistance();
+          delay(25);
+          myServo.write(angB_1);
+  
+          CORDX1=cos((angM_1)*(PI/180))*D_1;
+          CORDY1=sin((angM_1)*(PI/180))*D_1;
+
+          Serial.print("Objeto encontrado en:");
+          Serial.print('\n');
+          Serial.print("X | y");
+          Serial.print('\n');
+          Serial.print(CORDX1);
+          Serial.print(" | ");
+          Serial.print(CORDY1);
+          Serial.print('\n');
+
+          memoria++;
+          pasadas_1++;
+        }
+        else
+        {
+          angA_1=i;
+
+          for(i=angA_1++;distance<65||i<angA_1+10;i++)
+          {
+            myServo.write(i);
+            delay(75);
+            distance = calculateDistance();
+            delay(75);
+            if(distance<65)
+            {
+              angB_1=i;
+            }
+          }
+  
+          angM_1=((angA_1)+(angB_1))/2;
+          myServo.write(angM_1);
+          delay(250);
+          D_1=calculateDistance();
+          delay(75);
+          myServo.write(angB_1);
+  
+          CORDX1=cos((angM_1)*(PI/180))*D_1;  
+          CORDY1=sin((angM_1)*(PI/180))*D_1;
+
+          Serial.print("Objeto encontrado en:");
+          Serial.print('\n');
+          Serial.print("X | y");
+          Serial.print('\n');
+          Serial.print(CORDX1);
+          Serial.print(" | ");
+          Serial.print(CORDY1);
+          Serial.print('\n');
+
+          memoria=referencia;
+          pasadas_1++;
+          bandera=0;
+        }
+          
+        break;
+
+        case (1):
+        if(bandera==0)
+        {
+          angA_2=i;
+
+          for(i=angA_2++;distance<85||i<angA_2+10;i++)
+          {
+            myServo.write(i);
+            delay(75);
+            distance = calculateDistance();
+            delay(75);
+            if(distance<65)
+            {
+              angB_2=i;
+            }
+          }
+  
+          angM_2=((angA_2)+(angB_2))/2;
+          myServo.write(angM_2);
+          delay(250);
+          D_2=calculateDistance();
+          delay(25);
+          myServo.write(angB_2);
+  
+          CORDX2=cos((angM_2)*(PI/180))*D_2;  
+          CORDY2=sin((angM_2)*(PI/180))*D_2;
+
+          Serial.print("Objeto encontrado en:");
+          Serial.print('\n');
+          Serial.print("X | y");
+          Serial.print('\n');
+          Serial.print(CORDX2);
+          Serial.print(" | ");
+          Serial.print(CORDY2);
+          Serial.print('\n');
+
+          memoria++;
+          pasadas_2++;
+        }
+        else
+        {
+          angA_2=i;
+
+          for(i=angA_2++;distance<65||i<angA_2+10;i++)
+          {
+            myServo.write(i);
+            delay(75);
+            distance = calculateDistance();
+            delay(75);
+            if(distance<65)
+            {
+              angB_2=i;
+            }
+          }
+  
+          angM_2=((angA_2)+(angB_2))/2;
+          myServo.write(angM_2);
+          delay(250);
+          D_2=calculateDistance();
+          delay(75);
+          myServo.write(angB_2);
+  
+          CORDX2=cos((angM_2)*(PI/180))*D_2;  
+          CORDY2=sin((angM_2)*(PI/180))*D_2;
+
+          Serial.print("Objeto encontrado en:");
+          Serial.print('\n');
+          Serial.print("X | y");
+          Serial.print('\n');
+          Serial.print(CORDX2);
+          Serial.print(" | ");
+          Serial.print(CORDY2);
+          Serial.print('\n');
+
+          memoria=referencia;
+          pasadas_2++;
+          bandera=0;
+        }
+          
+        break;
+
+        case (2):
+        if(bandera==0)
+        {
+          angA_3=i;
+
+          for(i=angA_3++;distance<85||i<angA_3+10;i++)
+          {
+            myServo.write(i);
+            delay(75);
+            distance = calculateDistance();
+            delay(75);
+            if(distance<65)
+            {
+              angB_3=i;
+            }
+          }
+  
+          angM_3=((angA_3)+(angB_3))/2;
+          myServo.write(angM_3);
+          delay(250);
+          D_3=calculateDistance();
+          delay(75);
+          myServo.write(angB_3);
+  
+          CORDX3=cos((angM_3)*(PI/180))*D_3;  
+          CORDY3=sin((angM_3)*(PI/180))*D_3;
+
+          Serial.print("Objeto encontrado en:");
+          Serial.print('\n');
+          Serial.print("X | y");
+          Serial.print('\n');
+          Serial.print(CORDX3);
+          Serial.print(" | ");
+          Serial.print(CORDY3);
+          Serial.print('\n');
+          
+          memoria++;
+          pasadas_3++;
+        }
+        else
+        {
+          angA_3=i;
+
+          for(i=angA_3++;distance<65||i<angA_3+10;i++)
+          {
+            myServo.write(i);
+            delay(75);
+            distance = calculateDistance();
+            delay(75);
+            if(distance<65)
+            {
+              angB_3=i;
+            }
+          }
+  
+          angM_3=((angA_3)+(angB_3))/2;
+          myServo.write(angM_3);
+          delay(250);
+          D_3=calculateDistance();
+          delay(75);
+          myServo.write(angB_3);
+  
+          CORDX3=cos((angM_3)*(PI/180))*D_3;  
+          CORDY3=sin((angM_3)*(PI/180))*D_3;
+
+          Serial.print("Objeto encontrado en:");
+          Serial.print('\n');
+          Serial.print("X | y");
+          Serial.print('\n');
+          Serial.print(CORDX3);
+          Serial.print(" | ");
+          Serial.print(CORDY3);
+          Serial.print('\n');
+
+          memoria=referencia;
+          pasadas_3++;
+          bandera=0;
+        }
+          
+        break;
+      }
+        
+    }
+    else
+    {
+      if(i==angM_1)
+      {
+        distance=calculateDistance();
+        if (D_1<distance+4&&D_1>distance-4&&pasadas_1<5)
+        {
+          pasadas_1++;
+          Serial.print("Objeto encontrado en:");
+          Serial.print('\n');
+          Serial.print("X | y");
+          Serial.print('\n');
+          Serial.print(CORDX1);
+          Serial.print(" | ");
+          Serial.print(CORDY1);
+          Serial.print('\n');
+          
+        }
+        else
+        {
+          if (D_1>distance+4||D_1<distance-4&&pasadas_1<5)
+          {
+            if (distance<65)
+            {
+              angA_1=i;
+
+              for(i=angA_1++;distance<65||i<angA_1+10;i++)
+              {
+                myServo.write(i);
+                delay(75);
+                distance = calculateDistance();
+                delay(75);
+                if(distance<65)
+                {
+                  angB_1=i;
+                }
+              }
+    
+              angM_1=((angA_1)+(angB_1))/2;
+              myServo.write(angM_1);
+              delay(250);
+              D_1=calculateDistance();
+              delay(25);
+              myServo.write(angB_1);
+    
+              CORDX1=cos((angM_1)*(PI/180))*D_1;  
+              CORDY1=sin((angM_1)*(PI/180))*D_1;
+  
+              Serial.print("Objeto encontrado en:");
+              Serial.print('\n');
+              Serial.print("X | y");
+              Serial.print('\n');
+              Serial.print(CORDX1);
+              Serial.print(" | ");
+              Serial.print(CORDY1);
+              Serial.print('\n');
+              
+              pasadas_1=1;
+            }
+            else
+            {
+              referencia=memoria;
+              memoria=0;
+              pasadas_1=0;
+              bandera=1;
+            } 
+          }
+        }
+      }
+
+      if(i==angM_2)
+      {
+        distance=calculateDistance();
+        if (D_2<distance+4&&D_2>distance-4&&pasadas_2<5)
+        {
+          pasadas_2++;
+          Serial.print("Objeto encontrado en:");
+          Serial.print('\n');
+          Serial.print("X | y");
+          Serial.print('\n');
+          Serial.print(CORDX2);
+          Serial.print(" | ");
+          Serial.print(CORDY2);
+          Serial.print('\n');
+          
+        }
+        else
+        {
+          if (D_2>distance+4||D_2<distance-4&&pasadas_2<5)
+          {
+            if (distance<65)
+            {
+              angA_2=i;
+
+              for(i=angA_2++;distance<65||i<angA_2+10;i++)
+              {
+                myServo.write(i);
+                delay(75);
+                distance = calculateDistance();
+                delay(75);
+                if(distance<65)
+                {
+                  angB_2=i;
+                }
+              }
+    
+              angM_2=((angA_2)+(angB_2))/2;
+              myServo.write(angM_2);
+              delay(250);
+              D_2=calculateDistance();
+              delay(75);
+              myServo.write(angB_2);
+    
+              CORDX2=cos((angM_2)*(PI/180))*D_2;  
+              CORDY2=sin((angM_2)*(PI/180))*D_2;
+  
+              Serial.print("Objeto encontrado en:");
+              Serial.print('\n');
+              Serial.print("X | y");
+              Serial.print('\n');
+              Serial.print(CORDX2);
+              Serial.print(" | ");
+              Serial.print(CORDY2);
+              Serial.print('\n');
+              
+              pasadas_2=1;
+            }
+            else
+            {
+              referencia=memoria;
+              memoria=1;
+              pasadas_2=0;
+              bandera=1;
+            } 
+          }
+        }
+      }
+
+      if(i==angM_3)
+      {
+        distance=calculateDistance();
+        if (D_3<distance+4&&D_3>distance-4&&pasadas_3<5)
+        {
+          pasadas_3++;
+          Serial.print("Objeto encontrado en:");
+          Serial.print('\n');
+          Serial.print("X | y");
+          Serial.print('\n');
+          Serial.print(CORDX3);
+          Serial.print(" | ");
+          Serial.print(CORDY3);
+          Serial.print('\n');
+          
+        }
+        else
+        {
+          if (D_3>distance+4||D_3<distance-4&&pasadas_3<5)
+          {
+            if (distance<65)
+            {
+              angA_3=i;
+
+              for(i=angA_3++;distance<65||i<angA_3+10;i++)
+              {
+                myServo.write(i);
+                delay(75);
+                distance = calculateDistance();
+                delay(75);
+                if(distance<65)
+                {
+                  angB_3=i;
+                }
+              }
+    
+              angM_3=((angA_3)+(angB_3))/2;
+              myServo.write(angM_3);
+              delay(250);
+              D_3=calculateDistance();
+              delay(75);
+              myServo.write(angB_3);
+    
+              CORDX3=cos((angM_3)*(PI/180))*D_3;  
+              CORDY3=sin((angM_3)*(PI/180))*D_3;
+  
+              Serial.print("Objeto encontrado en:");
+              Serial.print('\n');
+              Serial.print("X | y");
+              Serial.print('\n');
+              Serial.print(CORDX3);
+              Serial.print(" | ");
+              Serial.print(CORDY3);
+              Serial.print('\n');
+              
+              pasadas_3=1;
+            }
+            else
+            {
+              referencia=memoria;
+              memoria=2;
+              pasadas_3=0;
+              bandera=1;
+            } 
+          }
+        }
+      }
+    }
+    //Serial.print(i);
+    //Serial.print('\n');
+    
+    
+  }
+  //Repeats the previous lines from 165 to 15 degrees
+
+  
+    
+  for(i=165;i>=15;i--)
+  {
+    i--;
+    myServo.write(i);
+    delay(75);
+  }
+}
+// Function for calculating the distance measured by the Ultrasonic sensor
+int calculateDistance(){ 
+  
+  digitalWrite(trigPin, LOW); 
+  delayMicroseconds(2);
+  // Sets the trigPin on HIGH state for 10 micro seconds
+  digitalWrite(trigPin, HIGH); 
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  duration = pulseIn(echoPin, HIGH); // Reads the echoPin, returns the sound wave travel time in microseconds
+  distance= duration*0.034/2;
+  return distance;
+}
